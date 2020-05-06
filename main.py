@@ -4,13 +4,26 @@
 # Display assignments to players, omitting that player's assignment.
 
 import logging
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, request, url_for
 
 app = Flask(__name__)
 
-@app.route('/')
+# Configure logging
+if not app.testing:
+    logging.basicConfig(level=logging.INFO)
+
+@app.route('/', methods=['GET','POST'])
 def welcome():
-    return "Welcome to the Name Game!"
+    logging.info('Someone went home!');
+    if request.method == 'POST':
+        data = request.form.to_dict(flat=True)
+        return redirect(url_for('.join_game'))
+    return render_template('home.html')
+
+@app.route('/join_game', methods=['GET','POST'])
+def join_game():
+    logging.info('Invited to join game');
+    return render_template('join_game.html')
 
 # This is only used when running locally. When running live, gunicorn runs
 # the application.
