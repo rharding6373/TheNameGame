@@ -6,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+	  <div id="results">
 	  <p>Waiting to join game...</p>
+	  <script>
+		  var updater = setInterval(function() {
+			  getResults();
+		  }, 5000);
+	  </script>
+	  </div>
   </body>
+  <script>
+  function getResults() {
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		  if (this.readyState == 4 && this.status == 200) {
+			  clearInterval(updater);
+			  document.getElementById("results").innerHTML = this.responseText;
+		  }
+	  };
+	  // "join_game?user="+this_user_name to send name along with GET request
+	  xhttp.open("GET", "join_game", true);
+	  xhttp.send();
+  }
+  </script>
 </html>
